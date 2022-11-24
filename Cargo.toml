@@ -1,0 +1,23 @@
+[package]
+name = "egg-drop"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+lockfree = "0.5.1"
+rayon = { version = "1.6.0", optional = true }
+
+[dev-dependencies]
+criterion = "0.4.0"
+
+[features]
+default = ["rayon"]
+rayon = ["dep:rayon"]
+
+[[bench]]
+name = "egg_drop"
+harness = false
+
+[[bench]]
+name = "rec"
+harness = false
