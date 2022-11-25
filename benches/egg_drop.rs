@@ -61,7 +61,7 @@ fn bench(c: &mut Criterion) {
 
 fn bench2(c: &mut Criterion) {
     let mut group = c.benchmark_group("Egg Dropping");
-    for parameter in [1, 2, 3, 4, 5, 6, 50, 500].iter() {
+    for parameter in [1, 2, 3, 4, 5, 6, 50, 500, 1000].iter() {
         group.throughput(Throughput::Elements(*parameter as u64));
         group.bench_with_input(
             BenchmarkId::new("Simple DP", parameter),
