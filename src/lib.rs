@@ -1,16 +1,16 @@
 #![feature(int_roundings)]
 
-mod dp;
 mod fast_dp;
-mod par_dp;
-mod rayon_par_dp;
+mod par_fast_dp;
+mod rayon_par_fast_dp;
 mod rec;
+mod simple_dp;
 
-pub use dp::dp;
 pub use fast_dp::fast_dp;
-pub use par_dp::par_dp;
-pub use rayon_par_dp::rayon_par_dp;
+pub use par_fast_dp::par_fast_dp;
+pub use rayon_par_fast_dp::rayon_par_fast_dp;
 pub use rec::rec;
+pub use simple_dp::simple_dp;
 
 #[inline]
 fn constraints(n: i32, h: i32) {

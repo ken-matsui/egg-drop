@@ -1,4 +1,4 @@
-use egg_drop::{dp, egg_drop, fast_dp, par_dp, rayon_par_dp};
+use egg_drop::{egg_drop, fast_dp, par_fast_dp, rayon_par_fast_dp, simple_dp};
 
 use criterion::{criterion_group, criterion_main, BenchmarkId, Criterion, Throughput};
 
@@ -38,7 +38,7 @@ fn bench(c: &mut Criterion) {
         group.bench_with_input(
             BenchmarkId::new("Simple DP", parameter),
             parameter,
-            |b, par| b.iter(|| egg_drop(dp, par.n, par.h)),
+            |b, par| b.iter(|| egg_drop(simple_dp, par.n, par.h)),
         );
         group.bench_with_input(
             BenchmarkId::new("Fast DP", parameter),
@@ -46,14 +46,14 @@ fn bench(c: &mut Criterion) {
             |b, par| b.iter(|| egg_drop(fast_dp, par.n, par.h)),
         );
         group.bench_with_input(
-            BenchmarkId::new("Rayon Parallel DP", parameter),
+            BenchmarkId::new("Rayon Parallel Fast DP", parameter),
             parameter,
-            |b, par| b.iter(|| egg_drop(rayon_par_dp, par.n, par.h)),
+            |b, par| b.iter(|| egg_drop(rayon_par_fast_dp, par.n, par.h)),
         );
         group.bench_with_input(
-            BenchmarkId::new("Parallel DP", parameter),
+            BenchmarkId::new("Parallel Fast DP", parameter),
             parameter,
-            |b, par| b.iter(|| egg_drop(par_dp, par.n, par.h)),
+            |b, par| b.iter(|| egg_drop(par_fast_dp, par.n, par.h)),
         );
     }
     group.finish();
@@ -61,27 +61,27 @@ fn bench(c: &mut Criterion) {
 
 fn bench2(c: &mut Criterion) {
     let mut group = c.benchmark_group("Egg Dropping");
-    for parameter in [1, 2, 3, 4, 5, 6, 50, 500, 1000].iter() {
+    for parameter in [1000, 2000, 3000, 4000, 5000].iter() {
         group.throughput(Throughput::Elements(*parameter as u64));
         group.bench_with_input(
             BenchmarkId::new("Simple DP", parameter),
             parameter,
-            |b, par| b.iter(|| egg_drop(dp, *par, 1000)),
+            |b, par| b.iter(|| egg_drop(simple_dp, *par, 5000)),
         );
         group.bench_with_input(
             BenchmarkId::new("Fast DP", parameter),
             parameter,
-            |b, par| b.iter(|| egg_drop(fast_dp, *par, 1000)),
+            |b, par| b.iter(|| egg_drop(fast_dp, *par, 5000)),
         );
         group.bench_with_input(
-            BenchmarkId::new("Rayon Parallel DP", parameter),
+            BenchmarkId::new("Rayon Parallel Fast DP", parameter),
             parameter,
-            |b, par| b.iter(|| egg_drop(rayon_par_dp, *par, 1000)),
+            |b, par| b.iter(|| egg_drop(rayon_par_fast_dp, *par, 5000)),
         );
         group.bench_with_input(
-            BenchmarkId::new("Parallel DP", parameter),
+            BenchmarkId::new("Parallel Fast DP", parameter),
             parameter,
-            |b, par| b.iter(|| egg_drop(par_dp, *par, 1000)),
+            |b, par| b.iter(|| egg_drop(par_fast_dp, *par, 5000)),
         );
     }
     group.finish();

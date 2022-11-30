@@ -1,7 +1,7 @@
 use std::cmp::{max, min};
 
 // ref: https://en.wikipedia.org/wiki/Dynamic_programming#Egg_dropping_puzzle
-pub fn dp(n: i32, h: i32) -> i32 {
+pub fn simple_dp(n: i32, h: i32) -> i32 {
     #[allow(non_snake_case)]
     let N = n as usize;
     #[allow(non_snake_case)]
@@ -32,13 +32,13 @@ mod tests {
 
     #[test]
     fn test_dp() {
-        assert_eq!(egg_drop(dp, 2, 1), 1);
-        assert_eq!(egg_drop(dp, 1, 2), 2);
-        assert_eq!(egg_drop(dp, 2, 6), 3);
-        assert_eq!(egg_drop(dp, 3, 14), 4);
-        assert_eq!(egg_drop(dp, 4, 30), 5);
-        assert_eq!(egg_drop(dp, 5, 62), 6);
-        assert_eq!(egg_drop(dp, 6, 126), 7);
-        assert_eq!(egg_drop(dp, 50, 500), 9);
+        assert_eq!(egg_drop(simple_dp, 2, 1), 1);
+        assert_eq!(egg_drop(simple_dp, 1, 2), 2);
+        assert_eq!(egg_drop(simple_dp, 2, 6), 3);
+        assert_eq!(egg_drop(simple_dp, 3, 14), 4);
+        assert_eq!(egg_drop(simple_dp, 4, 30), 5);
+        assert_eq!(egg_drop(simple_dp, 5, 62), 6);
+        assert_eq!(egg_drop(simple_dp, 6, 126), 7);
+        assert_eq!(egg_drop(simple_dp, 50, 500), 9);
     }
 }

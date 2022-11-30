@@ -5,7 +5,7 @@ use std::sync::Arc;
 use lockfree::map::Map as LockFreeMap;
 use rayon::prelude::*;
 
-pub fn rayon_par_dp(n: i32, h: i32) -> i32 {
+pub fn rayon_par_fast_dp(n: i32, h: i32) -> i32 {
     if n == 1 || h == 0 || h == 1 {
         return h;
     }
@@ -46,13 +46,13 @@ mod tests {
 
     #[test]
     fn test_rayon_par_dp() {
-        assert_eq!(egg_drop(rayon_par_dp, 2, 1), 1);
-        assert_eq!(egg_drop(rayon_par_dp, 1, 2), 2);
-        assert_eq!(egg_drop(rayon_par_dp, 2, 7), 4);
-        assert_eq!(egg_drop(rayon_par_dp, 3, 14), 4);
-        assert_eq!(egg_drop(rayon_par_dp, 4, 30), 5);
-        assert_eq!(egg_drop(rayon_par_dp, 5, 62), 6);
-        assert_eq!(egg_drop(rayon_par_dp, 6, 126), 7);
-        assert_eq!(egg_drop(rayon_par_dp, 50, 500), 9);
+        assert_eq!(egg_drop(rayon_par_fast_dp, 2, 1), 1);
+        assert_eq!(egg_drop(rayon_par_fast_dp, 1, 2), 2);
+        assert_eq!(egg_drop(rayon_par_fast_dp, 2, 7), 4);
+        assert_eq!(egg_drop(rayon_par_fast_dp, 3, 14), 4);
+        assert_eq!(egg_drop(rayon_par_fast_dp, 4, 30), 5);
+        assert_eq!(egg_drop(rayon_par_fast_dp, 5, 62), 6);
+        assert_eq!(egg_drop(rayon_par_fast_dp, 6, 126), 7);
+        assert_eq!(egg_drop(rayon_par_fast_dp, 50, 500), 9);
     }
 }
