@@ -3,10 +3,12 @@ use std::cmp::{max, min};
 // ref: https://en.wikipedia.org/wiki/Dynamic_programming#Egg_dropping_puzzle
 #[allow(non_snake_case)]
 pub fn simple_dp(N: usize, K: usize) -> i32 {
+    // K: width, N: height in the dp table to match dp[n][k] to W(n,k) in Wikipedia.
     let mut dp = vec![vec![0_i32; K + 1]; N + 1];
     for i in 0..=K {
         dp[1][i] = i as i32;
     }
+    // items in (n < 2 || k < 1) are already calculated
 
     for n in 2..=N {
         for k in 1..=K {
