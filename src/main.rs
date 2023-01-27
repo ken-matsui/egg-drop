@@ -13,6 +13,6 @@ fn main() {
             N + 1
         };
 
-        println!("{}..{}", from, to);
+        println!("{from}..{to}");
     }
 }
