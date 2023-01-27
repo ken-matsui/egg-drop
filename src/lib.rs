@@ -5,6 +5,7 @@ mod par_fast_dp;
 mod par_simple_dp;
 mod rayon_par_fast_dp;
 mod rec;
+mod simple_dp;
 mod simple_loop_dp;
 
 pub use fast_dp::fast_dp;
@@ -12,6 +13,7 @@ pub use par_fast_dp::par_fast_dp;
 pub use par_simple_dp::par_simple_dp;
 pub use rayon_par_fast_dp::rayon_par_fast_dp;
 pub use rec::rec;
+pub use simple_dp::simple_dp;
 pub use simple_loop_dp::simple_loop_dp;
 
 // LeetCode Constraints

@@ -1,24 +1,4 @@
-use std::cmp::{max, min};
-
-/// requires:
-/// 1. dp[n][0] = 0 forall n s.t. n >= 0
-/// 2. dp[1][k] = k forall k s.t. k >= 0
-fn compute_block(dp: &mut Vec<Vec<i32>>, from_n: usize, to_n: usize, from_k: usize, to_k: usize) {
-    for n in from_n..=to_n {
-        for k in from_k..=to_k {
-            if n < 2 || k < 1 {
-                // already calculated
-                continue;
-            }
-
-            let mut minval = i32::MAX;
-            for x in 1..=k {
-                minval = min(minval, max(dp[n - 1][x - 1], dp[n][k - x]));
-            }
-            dp[n][k] = 1 + minval;
-        }
-    }
-}
+use crate::simple_dp::compute_block;
 
 // ref: https://en.wikipedia.org/wiki/Dynamic_programming#Egg_dropping_puzzle
 #[allow(non_snake_case)]
