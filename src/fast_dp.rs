@@ -5,12 +5,12 @@ pub fn fast_dp(n: i32, h: i32) -> i32 {
     #[allow(non_snake_case)]
     let H = h as usize;
 
-    let mut memo = vec![vec![0_i32; N + 1]; H + 1];
+    let mut dp = vec![vec![0_i32; N + 1]; H + 1];
     let mut m = 0_usize;
-    while memo[m][N] < h {
+    while dp[m][N] < h {
         m += 1;
         for k in 1..=N {
-            memo[m][k] = memo[m - 1][k - 1] + memo[m - 1][k] + 1;
+            dp[m][k] = dp[m - 1][k - 1] + dp[m - 1][k] + 1;
         }
     }
     m as i32
