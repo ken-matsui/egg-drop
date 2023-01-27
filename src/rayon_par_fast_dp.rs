@@ -11,23 +11,23 @@ pub fn rayon_par_fast_dp(N: usize, K: usize) -> i32 {
         return K as i32;
     }
 
-    let mut memo = vec![];
+    let mut dp = vec![];
     for _ in 0..=K {
-        memo.push(Arc::new(LockFreeMap::<usize, i32>::new()));
+        dp.push(Arc::new(LockFreeMap::<usize, i32>::new()));
     }
     // Initialize LockFreeMap as 0_i32
     for i in 0..=N {
-        memo[0].insert(i, 0);
+        dp[0].insert(i, 0);
     }
 
     let mut m = 0_usize;
-    while memo[m].get(&N).unwrap().val() < &(K as i32) {
+    while dp[m].get(&N).unwrap().val() < &(K as i32) {
         m += 1;
-        memo[m].insert(0, 0);
+        dp[m].insert(0, 0);
         (1..=N).into_par_iter().for_each(|k| {
-            memo[m].insert(
+            dp[m].insert(
                 k,
-                memo[m - 1].get(&(k - 1)).unwrap().val() + memo[m - 1].get(&k).unwrap().val() + 1,
+                dp[m - 1].get(&(k - 1)).unwrap().val() + dp[m - 1].get(&k).unwrap().val() + 1,
             );
         });
     }

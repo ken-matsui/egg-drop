@@ -11,13 +11,13 @@ pub fn par_fast_dp(N: usize, K: usize) -> i32 {
         return K as i32;
     }
 
-    let mut memo = vec![];
+    let mut dp = vec![];
     for _ in 0..=K {
-        memo.push(Arc::new(LockFreeMap::<usize, i32>::new()));
+        dp.push(Arc::new(LockFreeMap::<usize, i32>::new()));
     }
     // Initialize LockFreeMap as 0_i32
     for n in 0..=N {
-        memo[0].insert(n, 0);
+        dp[0].insert(n, 0);
     }
 
     let num_threads = available_parallelism().unwrap().get();
@@ -30,14 +30,14 @@ pub fn par_fast_dp(N: usize, K: usize) -> i32 {
     // Narrow down number of chunks into <=num_threads
     let steps = N.div_ceil(num_threads);
     let mut m = 0_usize;
-    while memo[m].get(&N).unwrap().val() < &(K as i32) {
+    while dp[m].get(&N).unwrap().val() < &(K as i32) {
         m += 1;
-        memo[m].insert(0, 0);
+        dp[m].insert(0, 0);
 
         let mut threads = vec![];
         for from in (1..=N).step_by(steps) {
-            let memo_m = memo[m].clone();
-            let memo_m_1 = memo[m - 1].clone();
+            let dp_m = dp[m].clone();
+            let dp_m_1 = dp[m - 1].clone();
 
             threads.push(thread::spawn(move || {
                 let to = if from + steps < N {
@@ -47,9 +47,9 @@ pub fn par_fast_dp(N: usize, K: usize) -> i32 {
                 };
 
                 for k in from..to {
-                    memo_m.insert(
+                    dp_m.insert(
                         k,
-                        memo_m_1.get(&(k - 1)).unwrap().val() + memo_m_1.get(&k).unwrap().val() + 1,
+                        dp_m_1.get(&(k - 1)).unwrap().val() + dp_m_1.get(&k).unwrap().val() + 1,
                     );
                 }
             }));
