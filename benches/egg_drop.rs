@@ -1,4 +1,4 @@
-use egg_drop::{egg_drop, fast_dp, par_fast_dp, rayon_par_fast_dp, simple_loop_dp};
+use egg_drop::{egg_drop, simple_loop_dp};
 
 use criterion::{criterion_group, criterion_main, BenchmarkId, Criterion, Throughput};
 
@@ -10,21 +10,6 @@ fn bench(c: &mut Criterion) {
             BenchmarkId::new("Simple Loop DP", parameter),
             parameter,
             |b, par| b.iter(|| egg_drop(simple_loop_dp, *par, 5000)),
-        );
-        group.bench_with_input(
-            BenchmarkId::new("Fast DP", parameter),
-            parameter,
-            |b, par| b.iter(|| egg_drop(fast_dp, *par, 5000)),
-        );
-        group.bench_with_input(
-            BenchmarkId::new("Rayon Parallel Fast DP", parameter),
-            parameter,
-            |b, par| b.iter(|| egg_drop(rayon_par_fast_dp, *par, 5000)),
-        );
-        group.bench_with_input(
-            BenchmarkId::new("Parallel Fast DP", parameter),
-            parameter,
-            |b, par| b.iter(|| egg_drop(par_fast_dp, *par, 5000)),
         );
     }
     group.finish();
