@@ -13,16 +13,16 @@ pub use rec::rec;
 pub use simple_dp::simple_dp;
 
 #[inline]
-fn constraints(n: i32, h: i32) {
+fn precondition(n: i32, k: i32) {
     assert!(1 <= n, "constraints for n: number of eggs");
-    assert!(1 <= h, "constraints for h: number of floors");
+    assert!(1 <= k, "constraints for h: number of floors");
     // LeetCode Constraints
     // assert!(1 <= n && n <= 100, "constraints for n: number of eggs");
     // assert!(1 <= h && h <= 10000, "constraints for h: number of floors");
 }
 
 #[inline]
-pub fn egg_drop(f: fn(i32, i32) -> i32, n: i32, h: i32) -> i32 {
-    constraints(n, h);
-    f(n, h)
+pub fn egg_drop(f: fn(i32, i32) -> i32, n: i32, k: i32) -> i32 {
+    precondition(n, k);
+    f(n, k)
 }
