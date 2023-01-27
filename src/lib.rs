@@ -7,6 +7,7 @@ mod rayon_par_fast_dp;
 mod rec;
 mod simple_dp;
 mod simple_loop_dp;
+mod simple_vec_dp;
 
 pub use fast_dp::fast_dp;
 pub use par_fast_dp::par_fast_dp;
@@ -15,6 +16,7 @@ pub use rayon_par_fast_dp::rayon_par_fast_dp;
 pub use rec::rec;
 pub use simple_dp::simple_dp;
 pub use simple_loop_dp::simple_loop_dp;
+pub use simple_vec_dp::simple_vec_dp;
 
 #[inline]
 fn precondition(n: usize, k: usize) {
