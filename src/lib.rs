@@ -16,14 +16,13 @@ pub use rec::rec;
 pub use simple_dp::simple_dp;
 pub use simple_loop_dp::simple_loop_dp;
 
-// LeetCode Constraints
-// assert!(1 <= n && n <= 100, "constraints for n: number of eggs");
-// assert!(1 <= h && h <= 10000, "constraints for h: number of floors");
-
 #[inline]
 fn precondition(n: usize, k: usize) {
     assert!(1 <= n, "constraints for n: number of eggs");
     assert!(1 <= k, "constraints for h: number of floors");
+    // LeetCode Constraints
+    // assert!(1 <= n && n <= 100, "constraints for n: number of eggs");
+    // assert!(1 <= h && h <= 10000, "constraints for h: number of floors");
 }
 
 #[inline]
