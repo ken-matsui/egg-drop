@@ -1,9 +1,8 @@
 use std::cmp::{max, min};
 
 /// requires:
-/// 1. dp[0][0..k] are filled as 0
-/// 2. dp[1][0..k] are filled as 0..k
-/// 3. n >= 1
+/// 1. dp[n][0] = 0 forall n s.t. n >= 0
+/// 2. dp[1][k] = k forall k s.t. k >= 0
 fn compute_block(dp: &mut Vec<Vec<i32>>, from_n: usize, to_n: usize, from_k: usize, to_k: usize) {
     for n in from_n..=to_n {
         for k in from_k..=to_k {
