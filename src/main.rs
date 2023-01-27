@@ -39,6 +39,7 @@ fn diagonal_loop() {
     let mut ch = b'A';
 
     let mut array: Vec<Vec<char>> = vec![vec![ch as char; WIDTH]; HEIGHT];
+    #[allow(clippy::needless_range_loop)]
     for i in 0..HEIGHT {
         for j in 0..WIDTH {
             array[i][j] = ch as char;
@@ -46,6 +47,7 @@ fn diagonal_loop() {
         }
     }
 
+    #[allow(clippy::needless_range_loop)]
     for i in 0..HEIGHT {
         for j in 0..WIDTH {
             print!("{} ", array[i][j]);
