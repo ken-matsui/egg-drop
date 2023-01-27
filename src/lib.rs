@@ -2,6 +2,7 @@
 
 mod fast_dp;
 mod par_fast_dp;
+mod par_simple_dp;
 mod rayon_par_fast_dp;
 mod rec;
 mod simple_dp;
