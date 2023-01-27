@@ -19,6 +19,18 @@ fn div_rounding() {
 }
 
 #[allow(dead_code)]
+fn step_by() {
+    #[allow(non_snake_case)]
+    let N = 99_usize;
+    let n = 8_usize;
+
+    for from in (1..=N).step_by(n) {
+        let to = if from + n < N { from + n } else { N };
+        println!("{from}..={to}");
+    }
+}
+
+#[allow(dead_code)]
 fn diagonal_loop() {
     #[allow(non_snake_case)]
     let WIDTH: usize = 7;
@@ -55,5 +67,7 @@ fn diagonal_loop() {
 }
 
 fn main() {
+    // div_rounding();
+    // step_by();
     diagonal_loop();
 }
