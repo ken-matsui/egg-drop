@@ -1,14 +1,14 @@
 use std::cmp::{max, min};
 
 // ref: https://en.wikipedia.org/wiki/Dynamic_programming#Egg_dropping_puzzle
-pub fn rec(n: i32, h: i32) -> i32 {
-    if n == 1 || h == 0 || h == 1 {
-        return h;
+pub fn rec(n: usize, k: usize) -> i32 {
+    if n == 1 || k == 0 || k == 1 {
+        return k as i32;
     }
 
     let mut minval = i32::MAX;
-    for x in 1..=h {
-        minval = min(minval, 1 + max(rec(n, h - x), rec(n - 1, x - 1)));
+    for x in 1..=k {
+        minval = min(minval, 1 + max(rec(n, k - x), rec(n - 1, x - 1)));
     }
     minval
 }

@@ -5,18 +5,14 @@ use std::sync::Arc;
 use lockfree::map::Map as LockFreeMap;
 use rayon::prelude::*;
 
-pub fn rayon_par_fast_dp(n: i32, h: i32) -> i32 {
-    if n == 1 || h == 0 || h == 1 {
-        return h;
+#[allow(non_snake_case)]
+pub fn rayon_par_fast_dp(N: usize, K: usize) -> i32 {
+    if N == 1 || K == 0 || K == 1 {
+        return K as i32;
     }
 
-    #[allow(non_snake_case)]
-    let N = n as usize;
-    #[allow(non_snake_case)]
-    let H = h as usize;
-
     let mut memo = vec![];
-    for _ in 0..=H {
+    for _ in 0..=K {
         memo.push(Arc::new(LockFreeMap::<usize, i32>::new()));
     }
     // Initialize LockFreeMap as 0_i32
@@ -25,7 +21,7 @@ pub fn rayon_par_fast_dp(n: i32, h: i32) -> i32 {
     }
 
     let mut m = 0_usize;
-    while memo[m].get(&N).unwrap().val() < &h {
+    while memo[m].get(&N).unwrap().val() < &(K as i32) {
         m += 1;
         memo[m].insert(0, 0);
         (1..=N).into_par_iter().for_each(|k| {

@@ -1,13 +1,9 @@
 // ref: https://en.wikipedia.org/wiki/Dynamic_programming#Faster_DP_solution_using_a_different_parametrization
-pub fn fast_dp(n: i32, k: i32) -> i32 {
-    #[allow(non_snake_case)]
-    let N = n as usize;
-    #[allow(non_snake_case)]
-    let K = k as usize;
-
+#[allow(non_snake_case)]
+pub fn fast_dp(N: usize, K: usize) -> i32 {
     let mut dp = vec![vec![0_i32; N + 1]; K + 1];
     let mut m = 0_usize;
-    while dp[m][N] < k {
+    while dp[m][N] < K as i32 {
         m += 1;
         for x in 1..=N {
             dp[m][x] = dp[m - 1][x - 1] + dp[m - 1][x] + 1;

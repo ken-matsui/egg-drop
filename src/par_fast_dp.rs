@@ -5,36 +5,32 @@ use std::thread::{self, available_parallelism};
 
 use lockfree::map::Map as LockFreeMap;
 
-pub fn par_fast_dp(n: i32, h: i32) -> i32 {
-    if n == 1 || h == 0 || h == 1 {
-        return h;
+#[allow(non_snake_case)]
+pub fn par_fast_dp(N: usize, K: usize) -> i32 {
+    if N == 1 || K == 0 || K == 1 {
+        return K as i32;
     }
 
-    #[allow(non_snake_case)]
-    let N = n as usize;
-    #[allow(non_snake_case)]
-    let H = h as usize;
-
     let mut memo = vec![];
-    for _ in 0..=H {
+    for _ in 0..=K {
         memo.push(Arc::new(LockFreeMap::<usize, i32>::new()));
     }
     // Initialize LockFreeMap as 0_i32
-    for i in 0..=N {
-        memo[0].insert(i, 0);
+    for n in 0..=N {
+        memo[0].insert(n, 0);
     }
 
     let num_threads = available_parallelism().unwrap().get();
     assert!(num_threads >= 1_usize);
     // Each thread must have 2 or more calculation units.
     if N + 1 < num_threads * 2 {
-        return fast_dp(n, h);
+        return fast_dp(N, K);
     }
 
     // Narrow down number of chunks into <=num_threads
     let steps = N.div_ceil(num_threads);
     let mut m = 0_usize;
-    while memo[m].get(&N).unwrap().val() < &h {
+    while memo[m].get(&N).unwrap().val() < &(K as i32) {
         m += 1;
         memo[m].insert(0, 0);
 
