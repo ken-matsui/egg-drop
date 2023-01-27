@@ -16,8 +16,8 @@ pub fn rayon_par_fast_dp(N: usize, K: usize) -> i32 {
         dp.push(Arc::new(LockFreeMap::<usize, i32>::new()));
     }
     // Initialize LockFreeMap as 0_i32
-    for i in 0..=N {
-        dp[0].insert(i, 0);
+    for n in 0..=N {
+        dp[0].insert(n, 0);
     }
 
     let mut m = 0_usize;
