@@ -1,28 +1,28 @@
 use std::cmp::{max, min};
 
 // ref: https://en.wikipedia.org/wiki/Dynamic_programming#Egg_dropping_puzzle
-pub fn simple_dp(n: i32, h: i32) -> i32 {
+pub fn simple_dp(n: i32, k: i32) -> i32 {
     #[allow(non_snake_case)]
     let N = n as usize;
     #[allow(non_snake_case)]
-    let H = h as usize;
+    let K = k as usize;
 
-    let mut numdrops = vec![vec![0_i32; H + 1]; N + 1];
+    let mut numdrops = vec![vec![0_i32; K + 1]; N + 1];
 
-    for i in 0..=h {
+    for i in 0..=k {
         numdrops[1][i as usize] = i;
     }
 
     for i in 2..=N {
-        for j in 1..=H {
+        for j in 1..=K {
             let mut minval = i32::MAX;
             for x in 1..=j {
-                minval = min(minval, 1 + max(numdrops[i][j - x], numdrops[i - 1][x - 1]));
+                minval = min(minval, max(numdrops[i][j - x], numdrops[i - 1][x - 1]));
             }
-            numdrops[i][j] = minval;
+            numdrops[i][j] = 1 + minval;
         }
     }
-    numdrops[N][H]
+    numdrops[N][K]
 }
 
 #[cfg(test)]
