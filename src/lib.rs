@@ -1,5 +1,6 @@
 #![feature(int_roundings)]
 
+mod dptable;
 mod fast_dp;
 mod par_fast_dp;
 mod par_simple_dp;

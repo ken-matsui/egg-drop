@@ -1,27 +1,13 @@
-use std::cmp::{max, min, Ord};
-use std::hash::Hash;
-use std::sync::Arc;
+use std::cmp::{max, min};
 
-use lockfree::map::Map as LockFreeMap;
-
-/// NOTE: For V, please use cheap types that already implemented Copy
-///
-/// To avoid returning reference, we dereference the value and copy it.
-#[inline]
-fn get<K: Hash + Ord, V: Copy>(dp: &Vec<Arc<LockFreeMap<K, V>>>, n: usize, k: K) -> V {
-    *(dp[n].get(&k).unwrap().val())
-}
-#[inline]
-fn insert<K: Hash + Ord, V: Copy>(dp: &Vec<Arc<LockFreeMap<K, V>>>, n: usize, k: K, val: V) {
-    dp[n].insert(k, val);
-}
+use crate::dptable::{self, get, insert, DpTable};
 
 /// requires:
 /// 1. dp[n][0] = 0 forall n s.t. n >= 0
 /// 2. dp[1][k] = k forall k s.t. k >= 0
 /// 3. 1, 2 means dp[n][k] = already calculated forall n s.t. n < 2 or forall k s.t. k < 1
 pub(crate) fn compute_block(
-    dp: &Vec<Arc<LockFreeMap<usize, i32>>>,
+    dp: &DpTable<usize, i32>,
     from_n: usize,
     to_n: usize,
     from_k: usize,
@@ -50,17 +36,7 @@ pub(crate) fn compute_block(
 // ref: https://en.wikipedia.org/wiki/Dynamic_programming#Egg_dropping_puzzle
 #[allow(non_snake_case)]
 pub fn simple_dp(N: usize, K: usize) -> i32 {
-    // K: width, N: height in the dp table to match dp[n][k] to W(n,k) in Wikipedia.
-    let dp = vec![Arc::new(LockFreeMap::<usize, i32>::new()); N + 1];
-    // dp[n][0] = 0 forall n s.t. n >= 0
-    for n in 0..=N {
-        dp[n].insert(0, 0);
-    }
-    // dp[1][k] = k forall k s.t. k >= 0
-    for k in 0..=K {
-        dp[1].insert(k, k as i32);
-    }
-    // items in (n < 2 || k < 1) are already calculated
+    let dp = dptable::new(N, K);
 
     let step = 3; // step*step sized block
     for u in (2..=(N + K)).step_by(step) {
@@ -75,13 +51,7 @@ pub fn simple_dp(N: usize, K: usize) -> i32 {
         }
         println!();
     }
-
-    for n in 0..=N {
-        for k in 0..=K {
-            print!("{} ", get(&dp, n, k));
-        }
-        println!();
-    }
+    dptable::print(&dp, N, K);
 
     get(&dp, N, K)
 }
