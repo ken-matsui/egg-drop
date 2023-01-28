@@ -51,7 +51,7 @@ pub fn simple_dp(N: usize, K: usize) -> i32 {
         }
         println!();
     }
-    dptable::print(&dp, N, K);
+    dptable::println(&dp, N, K);
 
     get(&dp, N, K)
 }

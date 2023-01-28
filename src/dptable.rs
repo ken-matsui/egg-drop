@@ -43,3 +43,9 @@ pub(crate) fn print<V: Copy + Display>(dp: &DpTable<usize, V>, N: usize, K: usiz
         println!();
     }
 }
+#[inline]
+#[allow(non_snake_case)]
+pub(crate) fn println<V: Copy + Display>(dp: &DpTable<usize, V>, N: usize, K: usize) {
+    print(dp, N, K);
+    println!();
+}
