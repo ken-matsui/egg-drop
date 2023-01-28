@@ -1,4 +1,4 @@
-use crate::simple_dp::compute_block;
+use crate::simple_vec_dp::compute_block;
 
 // ref: https://en.wikipedia.org/wiki/Dynamic_programming#Egg_dropping_puzzle
 #[allow(non_snake_case)]
@@ -8,26 +8,17 @@ pub fn par_simple_dp(N: usize, K: usize) -> i32 {
     for k in 0..=K {
         dp[1][k] = k as i32;
     }
-    // items in (n < 2 || k < 1) are already calculated
+    // items in dp[n][k] s.t. (n < 2 || k < 1) are already calculated
 
-    let step = 3; // will be 3*3 blocks
+    let step = 3; // step*step sized block
     for u in (2..=(N + K)).step_by(step) {
         for k in (0..=u).step_by(step) {
             let n = u - k;
             if n <= N && k <= K {
                 let to_n = if n + step - 1 < N { n + step - 1 } else { N };
                 let to_k = if k + step - 1 < K { k + step - 1 } else { K };
-                println!("({n}, {k})..=({to_n}, {to_k})");
                 compute_block(&mut dp, n, to_n, k, to_k);
             }
-        }
-        println!();
-    }
-
-    #[allow(clippy::needless_range_loop)]
-    for n in 0..=N {
-        for k in 0..=K {
-            print!("{} ", dp[n][k]);
         }
         println!();
     }

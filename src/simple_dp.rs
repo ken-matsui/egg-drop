@@ -1,11 +1,27 @@
-use std::cmp::{max, min};
+use std::cmp::{max, min, Ord};
+use std::hash::Hash;
+use std::sync::Arc;
+
+use lockfree::map::Map as LockFreeMap;
+
+/// NOTE: For V, please use cheap types that already implemented Copy
+///
+/// To avoid returning reference, we dereference the value and copy it.
+#[inline]
+fn get<K: Hash + Ord, V: Copy>(dp: &Vec<Arc<LockFreeMap<K, V>>>, n: usize, k: K) -> V {
+    *(dp[n].get(&k).unwrap().val())
+}
+#[inline]
+fn insert<K: Hash + Ord, V: Copy>(dp: &Vec<Arc<LockFreeMap<K, V>>>, n: usize, k: K, val: V) {
+    dp[n].insert(k, val);
+}
 
 /// requires:
 /// 1. dp[n][0] = 0 forall n s.t. n >= 0
 /// 2. dp[1][k] = k forall k s.t. k >= 0
-/// 3. 1 & 2 => dp[n][k] = already calculated forall n s.t. n < 2 or forall k s.t. k < 1
+/// 3. 1, 2 means dp[n][k] = already calculated forall n s.t. n < 2 or forall k s.t. k < 1
 pub(crate) fn compute_block(
-    dp: &mut Vec<Vec<i32>>,
+    dp: &Vec<Arc<LockFreeMap<usize, i32>>>,
     from_n: usize,
     to_n: usize,
     from_k: usize,
@@ -24,9 +40,9 @@ pub(crate) fn compute_block(
 
             let mut minval = i32::MAX;
             for x in 1..=k {
-                minval = min(minval, max(dp[n - 1][x - 1], dp[n][k - x]));
+                minval = min(minval, max(get(dp, n - 1, x - 1), get(dp, n, k - x)));
             }
-            dp[n][k] = 1 + minval;
+            insert(dp, n, k, 1 + minval);
         }
     }
 }
@@ -35,35 +51,39 @@ pub(crate) fn compute_block(
 #[allow(non_snake_case)]
 pub fn simple_dp(N: usize, K: usize) -> i32 {
     // K: width, N: height in the dp table to match dp[n][k] to W(n,k) in Wikipedia.
-    let mut dp = vec![vec![0_i32; K + 1]; N + 1];
+    let dp = vec![Arc::new(LockFreeMap::<usize, i32>::new()); N + 1];
+    // dp[n][0] = 0 forall n s.t. n >= 0
+    for n in 0..=N {
+        dp[n].insert(0, 0);
+    }
+    // dp[1][k] = k forall k s.t. k >= 0
     for k in 0..=K {
-        dp[1][k] = k as i32;
+        dp[1].insert(k, k as i32);
     }
     // items in (n < 2 || k < 1) are already calculated
 
-    let step = 3; // will be 3*3 blocks
+    let step = 3; // step*step sized block
     for u in (2..=(N + K)).step_by(step) {
         for k in (0..=u).step_by(step) {
             let n = u - k;
             if n <= N && k <= K {
                 let to_n = if n + step - 1 < N { n + step - 1 } else { N };
                 let to_k = if k + step - 1 < K { k + step - 1 } else { K };
-                // println!("({n}, {k})..=({to_n}, {to_k})");
-                compute_block(&mut dp, n, to_n, k, to_k);
+                println!("({n}, {k})..=({to_n}, {to_k})");
+                compute_block(&dp, n, to_n, k, to_k);
             }
         }
         println!();
     }
 
-    // #[allow(clippy::needless_range_loop)]
-    // for n in 0..=N {
-    //     for k in 0..=K {
-    //         print!("{} ", dp[n][k]);
-    //     }
-    //     println!();
-    // }
+    for n in 0..=N {
+        for k in 0..=K {
+            print!("{} ", get(&dp, n, k));
+        }
+        println!();
+    }
 
-    dp[N][K]
+    get(&dp, N, K)
 }
 
 #[cfg(test)]
