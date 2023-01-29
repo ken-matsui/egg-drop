@@ -4,17 +4,17 @@ use criterion::{criterion_group, criterion_main, BenchmarkId, Criterion, Through
 
 fn bench(c: &mut Criterion) {
     let mut group = c.benchmark_group("Egg Drop");
-    for parameter in [100, 200, 300, 400, 500].iter() {
+    for parameter in [600, 700, 800, 900, 1000].iter() {
         group.throughput(Throughput::Elements(*parameter as u64));
         group.bench_with_input(
             BenchmarkId::new("Simple DP", parameter),
             parameter,
-            |b, par| b.iter(|| egg_drop(simple_dp, *par, 500)),
+            |b, par| b.iter(|| egg_drop(simple_dp, *par, 1000)),
         );
         group.bench_with_input(
             BenchmarkId::new("Parallel Simple DP", parameter),
             parameter,
-            |b, par| b.iter(|| egg_drop(par_simple_dp, *par, 500)),
+            |b, par| b.iter(|| egg_drop(par_simple_dp, *par, 1000)),
         );
     }
     group.finish();

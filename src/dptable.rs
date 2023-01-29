@@ -8,7 +8,7 @@ pub(crate) struct DpTable<V: Copy> {
     N: usize,
     K: usize,
 
-    data: Vec<Arc<LockFreeMap<usize, V>>>,
+    data: Vec<Arc<LockFreeMap<usize, V>>>, // (usize, usize)?
 }
 
 impl<V: Copy> DpTable<V> {

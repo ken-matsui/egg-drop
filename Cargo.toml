@@ -18,7 +18,3 @@ rayon = ["dep:rayon"]
 [[bench]]
 name = "egg_drop"
 harness = false
-
-[[bench]]
-name = "rec"
-harness = false

@@ -11,12 +11,12 @@ use crate::simple_dp::compute_block;
 pub fn par_simple_dp(N: usize, K: usize) -> i32 {
     let dp = Arc::new(DpTable::new(N, K));
 
-    let block = 100; // block*block sized block
+    let block = 500; // block*block sized block
     for u in (2..=(N + K)).step_by(block) {
         let mut threads = vec![];
 
         for k in (0..=u).step_by(block) {
-            let dp_cloned = dp.clone();
+            let dp_cloned = dp.clone(); // Arc::clone
             threads.push(thread::spawn(move || {
                 let n = u - k;
                 if n <= N && k <= K {
