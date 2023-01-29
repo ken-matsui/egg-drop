@@ -1,29 +1,40 @@
-use crate::simple_vec_dp::compute_block;
+use std::sync::Arc;
+use std::thread;
+
+use crate::dptable::DpTable;
+use crate::simple_dp::compute_block;
 
 // ref: https://en.wikipedia.org/wiki/Dynamic_programming#Egg_dropping_puzzle
 #[allow(non_snake_case)]
 pub fn par_simple_dp(N: usize, K: usize) -> i32 {
-    // K: width, N: height in the dp table to match dp[n][k] to W(n,k) in Wikipedia.
-    let mut dp = vec![vec![0_i32; K + 1]; N + 1];
-    for k in 0..=K {
-        dp[1][k] = k as i32;
-    }
-    // items in dp[n][k] s.t. (n < 2 || k < 1) are already calculated
+    let dp = Arc::new(DpTable::new(N, K));
 
-    let step = 3; // step*step sized block
-    for u in (2..=(N + K)).step_by(step) {
-        for k in (0..=u).step_by(step) {
-            let n = u - k;
-            if n <= N && k <= K {
-                let to_n = if n + step - 1 < N { n + step - 1 } else { N };
-                let to_k = if k + step - 1 < K { k + step - 1 } else { K };
-                compute_block(&mut dp, n, to_n, k, to_k);
-            }
+    let block = 100; // block*block sized block
+    for u in (2..=(N + K)).step_by(block) {
+        let mut threads = vec![];
+
+        for k in (0..=u).step_by(block) {
+            let dp_cloned = dp.clone();
+            threads.push(thread::spawn(move || {
+                let n = u - k;
+                if n <= N && k <= K {
+                    let to_n = if n + block - 1 < N { n + block - 1 } else { N };
+                    let to_k = if k + block - 1 < K { k + block - 1 } else { K };
+                    // println!("({n}, {k})..=({to_n}, {to_k})");
+                    compute_block(dp_cloned, n, to_n, k, to_k);
+                }
+            }));
         }
-        println!();
-    }
+        // println!();
 
-    dp[N][K]
+        for thread in threads {
+            // Wait for the thread to finish. Returns a result.
+            let _ = thread.join();
+        }
+    }
+    // println!("{:?}", dp);
+
+    dp.get(N, K)
 }
 
 #[cfg(test)]
