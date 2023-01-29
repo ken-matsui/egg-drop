@@ -4,6 +4,16 @@
 cargo test
 ```
 
+## Benchmark
+
 ```shell
-cargo bench
+cargo install cargo-criterion
+```
+
+```shell
+cargo criterion
+```
+
+```shell
+open ./target/criterion/reports/index.html
 ```
