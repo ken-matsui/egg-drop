@@ -1,6 +1,8 @@
 use std::cmp::{max, min};
 use std::sync::Arc;
 
+use debug_print::debug_println as dprintln;
+
 use crate::dptable::DpTable;
 
 /// requires:
@@ -46,13 +48,13 @@ pub fn simple_dp(N: usize, K: usize) -> i32 {
             if n <= N && k <= K {
                 let to_n = if n + block - 1 < N { n + block - 1 } else { N };
                 let to_k = if k + block - 1 < K { k + block - 1 } else { K };
-                // println!("({n}, {k})..=({to_n}, {to_k})");
+                dprintln!("({n}, {k})..=({to_n}, {to_k})");
                 compute_block(dp.clone(), n, to_n, k, to_k);
             }
         }
-        // println!();
+        dprintln!();
     }
-    // println!("{:?}", dp);
+    dprintln!("{:?}", dp);
 
     dp.get(N, K)
 }

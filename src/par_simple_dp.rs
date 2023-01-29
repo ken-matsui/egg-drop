@@ -1,6 +1,8 @@
 use std::sync::Arc;
 use std::thread;
 
+use debug_print::debug_println as dprintln;
+
 use crate::dptable::DpTable;
 use crate::simple_dp::compute_block;
 
@@ -20,19 +22,19 @@ pub fn par_simple_dp(N: usize, K: usize) -> i32 {
                 if n <= N && k <= K {
                     let to_n = if n + block - 1 < N { n + block - 1 } else { N };
                     let to_k = if k + block - 1 < K { k + block - 1 } else { K };
-                    // println!("({n}, {k})..=({to_n}, {to_k})");
+                    dprintln!("({n}, {k})..=({to_n}, {to_k})");
                     compute_block(dp_cloned, n, to_n, k, to_k);
                 }
             }));
         }
-        // println!();
+        dprintln!();
 
         for thread in threads {
             // Wait for the thread to finish. Returns a result.
             let _ = thread.join();
         }
     }
-    // println!("{:?}", dp);
+    dprintln!("{:?}", dp);
 
     dp.get(N, K)
 }
