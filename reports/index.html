@@ -63,8 +63,20 @@
     <h2>Criterion.rs Benchmark Index</h2>
     See individual benchmark pages below for more details.
     <ul>
-        <li><a href="1-vec-lfm/index.html">1-vec-lfm</a></li>
-        <li><a href="2-lfm/index.html">2-lfm</a></li>
+        <li>
+            <a href="1-vec-lfm/index.html">1-vec-lfm</a>
+            <p>Arc&lt;Vec&lt;Arc&lt;LockFreeMap&lt;usize, i32>>></p>
+            <p>n: 600, 700, 800, 900, 1000</p>
+            <p>k: 1000</p>
+            <p>block: 500</p>
+        </li>
+        <li>
+            <a href="2-lfm/index.html">2-lfm</a>
+            <p>Arc&lt;LockFreeMap&lt;(usize, usize), i32></p>
+            <p>n: 600, 700, 800, 900, 1000</p>
+            <p>k: 1000</p>
+            <p>block: 500</p>
+        </li>
     </ul>
 </div>
 </body>
