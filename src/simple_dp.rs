@@ -41,7 +41,7 @@ pub(crate) fn compute_block(
 pub fn simple_dp(N: usize, K: usize) -> i32 {
     let dp = Arc::new(DpTable::new(N, K));
 
-    let block = 500; // block*block sized block
+    let block = 100; // block*block sized block
     for u in (2..=(N + K)).step_by(block) {
         for k in (0..=u).step_by(block) {
             let n = u - k;

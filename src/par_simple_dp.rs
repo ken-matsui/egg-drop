@@ -6,12 +6,11 @@ use debug_print::debug_println as dprintln;
 use crate::dptable::DpTable;
 use crate::simple_dp::compute_block;
 
-// ref: https://en.wikipedia.org/wiki/Dynamic_programming#Egg_dropping_puzzle
 #[allow(non_snake_case)]
 pub fn par_simple_dp(N: usize, K: usize) -> i32 {
     let dp = Arc::new(DpTable::new(N, K));
 
-    let block = 500; // block*block sized block
+    let block = 100; // block*block sized block
     for u in (2..=(N + K)).step_by(block) {
         let mut threads = vec![];
 
