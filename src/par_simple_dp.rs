@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use std::thread;
+use threadpool::ThreadPool;
 
 use debug_print::debug_println as dprintln;
 
@@ -9,29 +9,33 @@ use crate::simple_dp::compute_block;
 #[allow(non_snake_case)]
 pub fn par_simple_dp(N: usize, K: usize) -> i32 {
     let dp = Arc::new(DpTable::new(N, K));
-
     let block = 100; // block*block sized block
-    for u in (2..=(N + K)).step_by(block) {
-        let mut threads = vec![];
 
+    let n_workers = if block > N || block > K {
+        1
+    } else if N / block >= K / block {
+        N / block // 1000/100 = max 10 diagonals in the middle
+    } else {
+        K / block
+    };
+    let pool = ThreadPool::new(n_workers);
+
+    for u in (2..=(N + K)).step_by(block) {
         for k in (0..=u).step_by(block) {
-            let dp_cloned = dp.clone(); // Arc::clone
-            threads.push(thread::spawn(move || {
+            let dp = dp.clone(); // Arc::clone
+
+            pool.execute(move || {
                 let n = u - k;
                 if n <= N && k <= K {
                     let to_n = if n + block - 1 < N { n + block - 1 } else { N };
                     let to_k = if k + block - 1 < K { k + block - 1 } else { K };
                     dprintln!("({n}, {k})..=({to_n}, {to_k})");
-                    compute_block(dp_cloned, n, to_n, k, to_k);
+                    compute_block(dp, n, to_n, k, to_k);
                 }
-            }));
+            });
         }
         dprintln!();
-
-        for thread in threads {
-            // Wait for the thread to finish. Returns a result.
-            let _ = thread.join();
-        }
+        pool.join();
     }
     dprintln!("{:?}", dp);
 
