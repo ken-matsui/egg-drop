@@ -9,12 +9,12 @@ use crate::simple_dp::compute_block;
 pub fn par_simple_dp(N: usize, K: usize) -> i32 {
     let mut dp = DpTable::new(N, K);
     let dp_p = dp.as_mut_ptr();
-    let block = 100; // block*block sized block
 
+    let block = 100; // block*block sized block
     let n_workers = if block > N || block > K {
         1
     } else if N / block >= K / block {
-        N / block // 1000/100 = max 10 diagonals in the middle
+        N / block // 1000/100 = max 10 diagonal blocks in the middle
     } else {
         K / block
     };
@@ -25,8 +25,6 @@ pub fn par_simple_dp(N: usize, K: usize) -> i32 {
             let dp_p = dp_p.clone();
 
             pool.execute(move || {
-                let _ = &dp_p;
-
                 let n = u - k;
                 if n <= N && k <= K {
                     let to_n = if n + block - 1 < N { n + block - 1 } else { N };
