@@ -32,9 +32,7 @@ pub fn par_simple_dp(N: usize, K: usize) -> i32 {
                     let to_n = if n + block - 1 < N { n + block - 1 } else { N };
                     let to_k = if k + block - 1 < K { k + block - 1 } else { K };
                     dprintln!("({n}, {k})..=({to_n}, {to_k})");
-                    unsafe {
-                        compute_block(dp_p, n, to_n, k, to_k);
-                    }
+                    compute_block(dp_p, n, to_n, k, to_k);
                 }
             });
         }

@@ -8,7 +8,7 @@ use crate::dptable::{DpTable, DpTablePtr};
 /// 1. dp[n][0] = 0 forall n s.t. n >= 0
 /// 2. dp[1][k] = k forall k s.t. k >= 0
 /// 3. 1, 2 means dp[n][k] = already calculated forall n s.t. n < 2 or forall k s.t. k < 1
-pub(crate) unsafe fn compute_block(
+pub(crate) fn compute_block(
     dp: DpTablePtr<i32>,
     from_n: usize,
     to_n: usize,
@@ -23,9 +23,13 @@ pub(crate) unsafe fn compute_block(
         for k in from_k..=to_k {
             let mut minval = i32::MAX;
             for x in 1..=k {
-                minval = min(minval, max(dp.get(n - 1, x - 1), dp.get(n, k - x)));
+                unsafe {
+                    minval = min(minval, max(dp.get(n - 1, x - 1), dp.get(n, k - x)));
+                }
             }
-            dp.insert(n, k, 1 + minval);
+            unsafe {
+                dp.insert(n, k, 1 + minval);
+            }
         }
     }
 }
@@ -44,9 +48,7 @@ pub fn simple_dp(N: usize, K: usize) -> i32 {
                 let to_n = if n + block - 1 < N { n + block - 1 } else { N };
                 let to_k = if k + block - 1 < K { k + block - 1 } else { K };
                 dprintln!("({n}, {k})..=({to_n}, {to_k})");
-                unsafe {
-                    compute_block(dp_p.clone(), n, to_n, k, to_k);
-                }
+                compute_block(dp_p.clone(), n, to_n, k, to_k);
             }
         }
         dprintln!();
