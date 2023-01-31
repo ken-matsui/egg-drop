@@ -2,20 +2,14 @@ use std::cmp::{max, min};
 
 use debug_print::debug_println as dprintln;
 
-use crate::dptable::DpTable;
-
-#[derive(Clone)]
-pub(crate) struct PtrWrapper(pub(crate) *mut Vec<i32>);
-
-unsafe impl Sync for PtrWrapper {}
-unsafe impl Send for PtrWrapper {}
+use crate::dptable::{DpTable, DpTablePtr};
 
 /// requires:
 /// 1. dp[n][0] = 0 forall n s.t. n >= 0
 /// 2. dp[1][k] = k forall k s.t. k >= 0
 /// 3. 1, 2 means dp[n][k] = already calculated forall n s.t. n < 2 or forall k s.t. k < 1
 pub(crate) unsafe fn compute_block(
-    dp: PtrWrapper,
+    dp: DpTablePtr<i32>,
     from_n: usize,
     to_n: usize,
     from_k: usize,
@@ -29,15 +23,9 @@ pub(crate) unsafe fn compute_block(
         for k in from_k..=to_k {
             let mut minval = i32::MAX;
             for x in 1..=k {
-                minval = min(
-                    minval,
-                    max(
-                        (*dp.0.offset((n - 1) as isize))[x - 1],
-                        (*dp.0.offset(n as isize))[k - x],
-                    ),
-                );
+                minval = min(minval, max(dp.get(n - 1, x - 1), dp.get(n, k - x)));
             }
-            (*dp.0.offset(n as isize))[k] = 1 + minval;
+            dp.insert(n, k, 1 + minval);
         }
     }
 }
@@ -46,7 +34,7 @@ pub(crate) unsafe fn compute_block(
 #[allow(non_snake_case)]
 pub fn simple_dp(N: usize, K: usize) -> i32 {
     let mut dp = DpTable::new(N, K);
-    let dp_p = PtrWrapper(dp.as_mut_ptr());
+    let dp_p = dp.as_mut_ptr();
 
     let block = 100; // block*block sized block
     for u in (2..=(N + K)).step_by(block) {

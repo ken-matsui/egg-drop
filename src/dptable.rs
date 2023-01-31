@@ -1,5 +1,22 @@
 use std::fmt::{Debug, Formatter};
 
+// Can send to threads + Mutable + Ptr
+#[derive(Clone)]
+pub(crate) struct DpTablePtr<V>(pub(crate) *mut Vec<V>);
+unsafe impl<V> Sync for DpTablePtr<V> {}
+unsafe impl<V> Send for DpTablePtr<V> {}
+
+impl<V: Copy> DpTablePtr<V> {
+    #[inline]
+    pub(crate) unsafe fn get(&self, n: usize, k: usize) -> V {
+        (*self.0.add(n))[k]
+    }
+    #[inline]
+    pub(crate) unsafe fn insert(&self, n: usize, k: usize, val: V) {
+        (*self.0.add(n))[k] = val;
+    }
+}
+
 #[allow(non_snake_case)]
 pub(crate) struct DpTable<V: Copy> {
     N: usize,
@@ -19,8 +36,8 @@ impl<V: Copy> DpTable<V> {
     }
 
     #[inline]
-    pub(crate) fn as_mut_ptr(&mut self) -> *mut Vec<V> {
-        self.data.as_mut_ptr()
+    pub(crate) fn as_mut_ptr(&mut self) -> DpTablePtr<V> {
+        DpTablePtr(self.data.as_mut_ptr())
     }
 }
 

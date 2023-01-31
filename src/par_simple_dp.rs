@@ -3,12 +3,12 @@ use threadpool::ThreadPool;
 use debug_print::debug_println as dprintln;
 
 use crate::dptable::DpTable;
-use crate::simple_dp::{compute_block, PtrWrapper};
+use crate::simple_dp::compute_block;
 
 #[allow(non_snake_case)]
 pub fn par_simple_dp(N: usize, K: usize) -> i32 {
     let mut dp = DpTable::new(N, K);
-    let dp_p = PtrWrapper(dp.as_mut_ptr());
+    let dp_p = dp.as_mut_ptr();
     let block = 100; // block*block sized block
 
     let n_workers = if block > N || block > K {
