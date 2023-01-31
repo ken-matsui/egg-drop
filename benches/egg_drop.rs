@@ -8,7 +8,7 @@ fn bench(c: &mut Criterion) {
     for parameter in [1000].iter() {
         group.throughput(Throughput::Elements(*parameter as u64));
         group.bench_with_input(
-            BenchmarkId::new("Simple DP", parameter),
+            BenchmarkId::new("Serial Simple DP", parameter),
             parameter,
             |b, par| b.iter(|| egg_drop(simple_dp, *par, 1000)),
         );
