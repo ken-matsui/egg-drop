@@ -17,3 +17,7 @@ cargo criterion
 ```shell
 open ./target/criterion/reports/index.html
 ```
+
+```shell
+mv ./target/criterion/reports ./reports/7-something
+```
