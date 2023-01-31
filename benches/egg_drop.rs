@@ -4,7 +4,8 @@ use criterion::{criterion_group, criterion_main, BenchmarkId, Criterion, Through
 
 fn bench(c: &mut Criterion) {
     let mut group = c.benchmark_group("Egg Drop");
-    for parameter in [600, 700, 800, 900, 1000].iter() {
+    group.sample_size(10); // 10 is minimum required; default is 100
+    for parameter in [1000].iter() {
         group.throughput(Throughput::Elements(*parameter as u64));
         group.bench_with_input(
             BenchmarkId::new("Simple DP", parameter),
