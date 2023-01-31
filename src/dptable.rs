@@ -9,9 +9,6 @@ pub(crate) struct DpTable<V: Copy> {
 }
 
 impl<V: Copy> DpTable<V> {
-    /// NOTE: For V, please use cheap types that already implemented Copy.
-    ///
-    /// To avoid returning reference, we dereference the value and copy it.
     #[inline]
     pub(crate) fn get(&self, n: usize, k: usize) -> V {
         self.data[n][k]
@@ -19,6 +16,11 @@ impl<V: Copy> DpTable<V> {
     #[inline]
     pub(crate) fn insert(&mut self, n: usize, k: usize, val: V) {
         self.data[n][k] = val;
+    }
+
+    #[inline]
+    pub(crate) fn as_mut_ptr(&mut self) -> *mut Vec<V> {
+        self.data.as_mut_ptr()
     }
 }
 

@@ -1,16 +1,21 @@
 use std::cmp::{max, min};
-use std::sync::{Arc, RwLock};
 
 use debug_print::debug_println as dprintln;
 
 use crate::dptable::DpTable;
 
+#[derive(Clone)]
+pub(crate) struct PtrWrapper(pub(crate) *mut Vec<i32>);
+
+unsafe impl Sync for PtrWrapper {}
+unsafe impl Send for PtrWrapper {}
+
 /// requires:
 /// 1. dp[n][0] = 0 forall n s.t. n >= 0
 /// 2. dp[1][k] = k forall k s.t. k >= 0
 /// 3. 1, 2 means dp[n][k] = already calculated forall n s.t. n < 2 or forall k s.t. k < 1
-pub(crate) fn compute_block(
-    dp: Arc<RwLock<DpTable<i32>>>,
+pub(crate) unsafe fn compute_block(
+    dp: PtrWrapper,
     from_n: usize,
     to_n: usize,
     from_k: usize,
@@ -23,20 +28,16 @@ pub(crate) fn compute_block(
     for n in from_n..=to_n {
         for k in from_k..=to_k {
             let mut minval = i32::MAX;
-
-            {
-                let dp_reader = dp.read().unwrap();
-                for x in 1..=k {
-                    minval = min(
-                        minval,
-                        max(dp_reader.get(n - 1, x - 1), dp_reader.get(n, k - x)),
-                    );
-                }
+            for x in 1..=k {
+                minval = min(
+                    minval,
+                    max(
+                        (*dp.0.offset((n - 1) as isize))[x - 1],
+                        (*dp.0.offset(n as isize))[k - x],
+                    ),
+                );
             }
-            {
-                let mut dp_writer = dp.write().unwrap();
-                dp_writer.insert(n, k, 1 + minval);
-            }
+            (*dp.0.offset(n as isize))[k] = 1 + minval;
         }
     }
 }
@@ -44,7 +45,8 @@ pub(crate) fn compute_block(
 // ref: https://en.wikipedia.org/wiki/Dynamic_programming#Egg_dropping_puzzle
 #[allow(non_snake_case)]
 pub fn simple_dp(N: usize, K: usize) -> i32 {
-    let dp = Arc::new(RwLock::new(DpTable::new(N, K)));
+    let mut dp = DpTable::new(N, K);
+    let dp_p = PtrWrapper(dp.as_mut_ptr());
 
     let block = 100; // block*block sized block
     for u in (2..=(N + K)).step_by(block) {
@@ -54,15 +56,15 @@ pub fn simple_dp(N: usize, K: usize) -> i32 {
                 let to_n = if n + block - 1 < N { n + block - 1 } else { N };
                 let to_k = if k + block - 1 < K { k + block - 1 } else { K };
                 dprintln!("({n}, {k})..=({to_n}, {to_k})");
-                compute_block(dp.clone(), n, to_n, k, to_k);
+                unsafe {
+                    compute_block(dp_p.clone(), n, to_n, k, to_k);
+                }
             }
         }
         dprintln!();
     }
     dprintln!("{:?}", dp);
-
-    let dp_reader = dp.read().unwrap();
-    dp_reader.get(N, K)
+    dp.get(N, K)
 }
 
 #[cfg(test)]

@@ -1,14 +1,14 @@
-use std::sync::{Arc, RwLock};
 use threadpool::ThreadPool;
 
 use debug_print::debug_println as dprintln;
 
 use crate::dptable::DpTable;
-use crate::simple_dp::compute_block;
+use crate::simple_dp::{compute_block, PtrWrapper};
 
 #[allow(non_snake_case)]
 pub fn par_simple_dp(N: usize, K: usize) -> i32 {
-    let dp = Arc::new(RwLock::new(DpTable::new(N, K)));
+    let mut dp = DpTable::new(N, K);
+    let dp_p = PtrWrapper(dp.as_mut_ptr());
     let block = 100; // block*block sized block
 
     let n_workers = if block > N || block > K {
@@ -22,15 +22,19 @@ pub fn par_simple_dp(N: usize, K: usize) -> i32 {
 
     for u in (2..=(N + K)).step_by(block) {
         for k in (0..=u).step_by(block) {
-            let dp = dp.clone(); // Arc::clone
+            let dp_p = dp_p.clone();
 
             pool.execute(move || {
+                let _ = &dp_p;
+
                 let n = u - k;
                 if n <= N && k <= K {
                     let to_n = if n + block - 1 < N { n + block - 1 } else { N };
                     let to_k = if k + block - 1 < K { k + block - 1 } else { K };
                     dprintln!("({n}, {k})..=({to_n}, {to_k})");
-                    compute_block(dp, n, to_n, k, to_k);
+                    unsafe {
+                        compute_block(dp_p, n, to_n, k, to_k);
+                    }
                 }
             });
         }
@@ -38,9 +42,7 @@ pub fn par_simple_dp(N: usize, K: usize) -> i32 {
         pool.join();
     }
     dprintln!("{:?}", dp);
-
-    let dp_reader = dp.read().unwrap();
-    dp_reader.get(N, K)
+    dp.get(N, K)
 }
 
 #[cfg(test)]
