@@ -16,17 +16,12 @@ pub(crate) fn compute_block(
     from_k: usize,
     to_k: usize,
 ) {
-    for n in from_n..=to_n {
-        if n < 2 {
-            // already calculated
-            continue;
-        }
-        for k in from_k..=to_k {
-            if k < 1 {
-                // already calculated
-                continue;
-            }
+    // We assume these are already calculated
+    let from_n = if from_n < 2 { 2 } else { from_n };
+    let from_k = if from_k < 1 { 1 } else { from_k };
 
+    for n in from_n..=to_n {
+        for k in from_k..=to_k {
             let mut minval = i32::MAX;
 
             {
