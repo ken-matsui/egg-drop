@@ -1,14 +1,11 @@
 use std::fmt::{Debug, Formatter};
-use std::sync::Arc;
-
-pub(crate) use lockfree::map::Map as LockFreeMap;
 
 #[allow(non_snake_case)]
 pub(crate) struct DpTable<V: Copy> {
     N: usize,
     K: usize,
 
-    data: Vec<Arc<LockFreeMap<usize, V>>>,
+    data: Vec<Vec<V>>,
 }
 
 impl<V: Copy> DpTable<V> {
@@ -17,11 +14,11 @@ impl<V: Copy> DpTable<V> {
     /// To avoid returning reference, we dereference the value and copy it.
     #[inline]
     pub(crate) fn get(&self, n: usize, k: usize) -> V {
-        *(self.data[n].get(&k).unwrap().val())
+        self.data[n][k]
     }
     #[inline]
-    pub(crate) fn insert(&self, n: usize, k: usize, val: V) {
-        self.data[n].insert(k, val);
+    pub(crate) fn insert(&mut self, n: usize, k: usize, val: V) {
+        self.data[n][k] = val;
     }
 }
 
@@ -29,16 +26,13 @@ impl DpTable<i32> {
     #[allow(non_snake_case)]
     pub(crate) fn new(N: usize, K: usize) -> Self {
         // K: width, N: height in the dp table to match dp[n][k] to W(n,k) in Wikipedia.
-        let dp = Self {
+        let mut dp = Self {
             N,
             K,
-            data: vec![Arc::new(LockFreeMap::<usize, i32>::new()); N + 1],
+            data: vec![vec![0_i32; K + 1]; N + 1],
         };
         // dp[n][0] = 0 forall n s.t. n >= 0
-        for n in 0..=N {
-            dp.insert(n, 0, 0);
-        }
-        // dp[1][k] = k forall k s.t. k >= 0
+        // inv: dp[1][k] = k forall k s.t. k >= 0
         for k in 0..=K {
             dp.insert(1, k, k as i32);
         }

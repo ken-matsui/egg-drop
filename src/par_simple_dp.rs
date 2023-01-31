@@ -1,4 +1,4 @@
-use std::sync::Arc;
+use std::sync::{Arc, RwLock};
 use threadpool::ThreadPool;
 
 use debug_print::debug_println as dprintln;
@@ -8,7 +8,7 @@ use crate::simple_dp::compute_block;
 
 #[allow(non_snake_case)]
 pub fn par_simple_dp(N: usize, K: usize) -> i32 {
-    let dp = Arc::new(DpTable::new(N, K));
+    let dp = Arc::new(RwLock::new(DpTable::new(N, K)));
     let block = 100; // block*block sized block
 
     let n_workers = if block > N || block > K {
@@ -39,7 +39,8 @@ pub fn par_simple_dp(N: usize, K: usize) -> i32 {
     }
     dprintln!("{:?}", dp);
 
-    dp.get(N, K)
+    let dp_reader = dp.read().unwrap();
+    dp_reader.get(N, K)
 }
 
 #[cfg(test)]

@@ -1,5 +1,5 @@
 use std::cmp::{max, min};
-use std::sync::Arc;
+use std::sync::{Arc, RwLock};
 
 use debug_print::debug_println as dprintln;
 
@@ -10,7 +10,7 @@ use crate::dptable::DpTable;
 /// 2. dp[1][k] = k forall k s.t. k >= 0
 /// 3. 1, 2 means dp[n][k] = already calculated forall n s.t. n < 2 or forall k s.t. k < 1
 pub(crate) fn compute_block(
-    dp: Arc<DpTable<i32>>,
+    dp: Arc<RwLock<DpTable<i32>>>,
     from_n: usize,
     to_n: usize,
     from_k: usize,
@@ -28,10 +28,20 @@ pub(crate) fn compute_block(
             }
 
             let mut minval = i32::MAX;
-            for x in 1..=k {
-                minval = min(minval, max(dp.get(n - 1, x - 1), dp.get(n, k - x)));
+
+            {
+                let dp_reader = dp.read().unwrap();
+                for x in 1..=k {
+                    minval = min(
+                        minval,
+                        max(dp_reader.get(n - 1, x - 1), dp_reader.get(n, k - x)),
+                    );
+                }
             }
-            dp.insert(n, k, 1 + minval);
+            {
+                let mut dp_writer = dp.write().unwrap();
+                dp_writer.insert(n, k, 1 + minval);
+            }
         }
     }
 }
@@ -39,7 +49,7 @@ pub(crate) fn compute_block(
 // ref: https://en.wikipedia.org/wiki/Dynamic_programming#Egg_dropping_puzzle
 #[allow(non_snake_case)]
 pub fn simple_dp(N: usize, K: usize) -> i32 {
-    let dp = Arc::new(DpTable::new(N, K));
+    let dp = Arc::new(RwLock::new(DpTable::new(N, K)));
 
     let block = 100; // block*block sized block
     for u in (2..=(N + K)).step_by(block) {
@@ -56,7 +66,8 @@ pub fn simple_dp(N: usize, K: usize) -> i32 {
     }
     dprintln!("{:?}", dp);
 
-    dp.get(N, K)
+    let dp_reader = dp.read().unwrap();
+    dp_reader.get(N, K)
 }
 
 #[cfg(test)]
