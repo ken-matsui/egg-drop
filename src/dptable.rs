@@ -8,11 +8,11 @@ pub(crate) struct DpTable<V: Copy> {
     N: usize,
     K: usize,
 
-    data: Vec<Arc<LockFreeMap<usize, V>>>, // (usize, usize)?
+    data: Vec<Arc<LockFreeMap<usize, V>>>,
 }
 
 impl<V: Copy> DpTable<V> {
-    /// NOTE: For V, please use cheap types that already implemented Copy
+    /// NOTE: For V, please use cheap types that already implemented Copy.
     ///
     /// To avoid returning reference, we dereference the value and copy it.
     #[inline]
@@ -29,17 +29,21 @@ impl DpTable<i32> {
     #[allow(non_snake_case)]
     pub(crate) fn new(N: usize, K: usize) -> Self {
         // K: width, N: height in the dp table to match dp[n][k] to W(n,k) in Wikipedia.
-        let dp = vec![Arc::new(LockFreeMap::<usize, i32>::new()); N + 1];
+        let dp = Self {
+            N,
+            K,
+            data: vec![Arc::new(LockFreeMap::<usize, i32>::new()); N + 1],
+        };
         // dp[n][0] = 0 forall n s.t. n >= 0
         for n in 0..=N {
-            dp[n].insert(0, 0);
+            dp.insert(n, 0, 0);
         }
         // dp[1][k] = k forall k s.t. k >= 0
         for k in 0..=K {
-            dp[1].insert(k, k as i32);
+            dp.insert(1, k, k as i32);
         }
         // items in (n < 2 || k < 1) are already calculated
-        Self { N, K, data: dp }
+        dp
     }
 }
 
