@@ -36,17 +36,17 @@ pub(crate) fn compute_block(
 
 // ref: https://en.wikipedia.org/wiki/Dynamic_programming#Egg_dropping_puzzle
 #[allow(non_snake_case)]
-pub fn simple_dp(N: usize, K: usize) -> i32 {
+// bsize*bsize sized block
+pub fn simple_dp(N: usize, K: usize, bsize: usize) -> i32 {
     let mut dp = DpTable::new(N, K);
     let dp_p = dp.as_mut_ptr();
 
-    let block = 100; // block*block sized block
-    for u in (2..=(N + K)).step_by(block) {
-        for k in (0..=u).step_by(block) {
+    for u in (2..=(N + K)).step_by(bsize) {
+        for k in (0..=u).step_by(bsize) {
             let n = u - k;
             if n <= N && k <= K {
-                let to_n = if n + block - 1 < N { n + block - 1 } else { N };
-                let to_k = if k + block - 1 < K { k + block - 1 } else { K };
+                let to_n = if n + bsize - 1 < N { n + bsize - 1 } else { N };
+                let to_k = if k + bsize - 1 < K { k + bsize - 1 } else { K };
                 dprintln!("({n}, {k})..=({to_n}, {to_k})");
                 compute_block(dp_p.clone(), n, to_n, k, to_k);
             }
@@ -60,20 +60,20 @@ pub fn simple_dp(N: usize, K: usize) -> i32 {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::egg_drop_old;
+    use crate::egg_drop;
 
     #[test]
     fn test_simple_dp() {
-        assert_eq!(egg_drop_old(simple_dp, 8, 8), 4); // useful for debugging
-        assert_eq!(egg_drop_old(simple_dp, 2, 1), 1);
-        assert_eq!(egg_drop_old(simple_dp, 1, 2), 2);
-        assert_eq!(egg_drop_old(simple_dp, 2, 6), 3);
-        assert_eq!(egg_drop_old(simple_dp, 3, 14), 4);
-        assert_eq!(egg_drop_old(simple_dp, 4, 30), 5);
-        assert_eq!(egg_drop_old(simple_dp, 5, 62), 6);
-        assert_eq!(egg_drop_old(simple_dp, 6, 126), 7);
-        assert_eq!(egg_drop_old(simple_dp, 50, 500), 9);
-        assert_eq!(egg_drop_old(simple_dp, 10, 8), 4);
-        assert_eq!(egg_drop_old(simple_dp, 50, 500), 9);
+        assert_eq!(egg_drop(simple_dp, 8, 8, 2), 4); // useful for debugging
+        assert_eq!(egg_drop(simple_dp, 2, 1, 2), 1);
+        assert_eq!(egg_drop(simple_dp, 1, 2, 2), 2);
+        assert_eq!(egg_drop(simple_dp, 2, 6, 2), 3);
+        assert_eq!(egg_drop(simple_dp, 3, 14, 2), 4);
+        assert_eq!(egg_drop(simple_dp, 4, 30, 2), 5);
+        assert_eq!(egg_drop(simple_dp, 5, 62, 2), 6);
+        assert_eq!(egg_drop(simple_dp, 6, 126, 2), 7);
+        assert_eq!(egg_drop(simple_dp, 50, 500, 2), 9);
+        assert_eq!(egg_drop(simple_dp, 10, 8, 2), 4);
+        assert_eq!(egg_drop(simple_dp, 50, 500, 2), 9);
     }
 }

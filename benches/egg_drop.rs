@@ -1,21 +1,21 @@
-use egg_drop::{egg_drop_old, par_simple_dp, simple_dp};
+use egg_drop::{egg_drop, par_simple_dp, simple_dp};
 
 use criterion::{criterion_group, criterion_main, BenchmarkId, Criterion, Throughput};
 
 fn bench(c: &mut Criterion) {
     let mut group = c.benchmark_group("Egg Drop");
     group.sample_size(10); // 10 is minimum required; default is 100
-    for parameter in [1000].iter() {
+    for parameter in [50, 40, 30, 20, 10].iter() {
         group.throughput(Throughput::Elements(*parameter as u64));
         group.bench_with_input(
             BenchmarkId::new("Serial Simple DP", parameter),
             parameter,
-            |b, par| b.iter(|| egg_drop_old(simple_dp, *par, 1000)),
+            |b, par| b.iter(|| egg_drop(simple_dp, 1000, 1000, *par)),
         );
         group.bench_with_input(
             BenchmarkId::new("Parallel Simple DP", parameter),
             parameter,
-            |b, par| b.iter(|| egg_drop_old(par_simple_dp, *par, 1000)),
+            |b, par| b.iter(|| egg_drop(par_simple_dp, 1000, 1000, *par)),
         );
     }
     group.finish();
