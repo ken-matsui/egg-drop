@@ -29,7 +29,7 @@ fn precondition(n: usize, k: usize) {
 }
 
 #[inline]
-pub fn egg_drop(f: fn(usize, usize) -> i32, n: usize, k: usize) -> i32 {
+pub fn egg_drop_old(f: fn(usize, usize) -> i32, n: usize, k: usize) -> i32 {
     precondition(n, k);
     f(n, k)
 }

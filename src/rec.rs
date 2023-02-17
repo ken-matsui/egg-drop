@@ -16,13 +16,13 @@ pub fn rec(n: usize, k: usize) -> i32 {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::egg_drop;
+    use crate::egg_drop_old;
 
     #[test]
     fn test_rec() {
-        assert_eq!(egg_drop(rec, 2, 1), 1);
-        assert_eq!(egg_drop(rec, 1, 2), 2);
-        assert_eq!(egg_drop(rec, 2, 6), 3);
-        assert_eq!(egg_drop(rec, 3, 14), 4);
+        assert_eq!(egg_drop_old(rec, 2, 1), 1);
+        assert_eq!(egg_drop_old(rec, 1, 2), 2);
+        assert_eq!(egg_drop_old(rec, 2, 6), 3);
+        assert_eq!(egg_drop_old(rec, 3, 14), 4);
     }
 }

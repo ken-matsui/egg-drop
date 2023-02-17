@@ -15,17 +15,17 @@ pub fn fast_dp(N: usize, K: usize) -> i32 {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::egg_drop;
+    use crate::egg_drop_old;
 
     #[test]
     fn test_fast_dp() {
-        assert_eq!(egg_drop(fast_dp, 2, 1), 1);
-        assert_eq!(egg_drop(fast_dp, 1, 2), 2);
-        assert_eq!(egg_drop(fast_dp, 2, 7), 4);
-        assert_eq!(egg_drop(fast_dp, 3, 14), 4);
-        assert_eq!(egg_drop(fast_dp, 4, 30), 5);
-        assert_eq!(egg_drop(fast_dp, 5, 62), 6);
-        assert_eq!(egg_drop(fast_dp, 6, 126), 7);
-        assert_eq!(egg_drop(fast_dp, 50, 500), 9);
+        assert_eq!(egg_drop_old(fast_dp, 2, 1), 1);
+        assert_eq!(egg_drop_old(fast_dp, 1, 2), 2);
+        assert_eq!(egg_drop_old(fast_dp, 2, 7), 4);
+        assert_eq!(egg_drop_old(fast_dp, 3, 14), 4);
+        assert_eq!(egg_drop_old(fast_dp, 4, 30), 5);
+        assert_eq!(egg_drop_old(fast_dp, 5, 62), 6);
+        assert_eq!(egg_drop_old(fast_dp, 6, 126), 7);
+        assert_eq!(egg_drop_old(fast_dp, 50, 500), 9);
     }
 }

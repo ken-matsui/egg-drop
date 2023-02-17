@@ -25,19 +25,19 @@ pub fn simple_loop_dp(N: usize, K: usize) -> i32 {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::egg_drop;
+    use crate::egg_drop_old;
 
     #[test]
     fn test_simple_loop_dp() {
-        assert_eq!(egg_drop(simple_loop_dp, 2, 1), 1);
-        assert_eq!(egg_drop(simple_loop_dp, 1, 2), 2);
-        assert_eq!(egg_drop(simple_loop_dp, 2, 6), 3);
-        assert_eq!(egg_drop(simple_loop_dp, 3, 14), 4);
-        assert_eq!(egg_drop(simple_loop_dp, 4, 30), 5);
-        assert_eq!(egg_drop(simple_loop_dp, 5, 62), 6);
-        assert_eq!(egg_drop(simple_loop_dp, 6, 126), 7);
-        assert_eq!(egg_drop(simple_loop_dp, 4, 2), 2);
-        assert_eq!(egg_drop(simple_loop_dp, 8, 8), 4);
-        assert_eq!(egg_drop(simple_loop_dp, 50, 500), 9);
+        assert_eq!(egg_drop_old(simple_loop_dp, 2, 1), 1);
+        assert_eq!(egg_drop_old(simple_loop_dp, 1, 2), 2);
+        assert_eq!(egg_drop_old(simple_loop_dp, 2, 6), 3);
+        assert_eq!(egg_drop_old(simple_loop_dp, 3, 14), 4);
+        assert_eq!(egg_drop_old(simple_loop_dp, 4, 30), 5);
+        assert_eq!(egg_drop_old(simple_loop_dp, 5, 62), 6);
+        assert_eq!(egg_drop_old(simple_loop_dp, 6, 126), 7);
+        assert_eq!(egg_drop_old(simple_loop_dp, 4, 2), 2);
+        assert_eq!(egg_drop_old(simple_loop_dp, 8, 8), 4);
+        assert_eq!(egg_drop_old(simple_loop_dp, 50, 500), 9);
     }
 }

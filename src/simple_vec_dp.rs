@@ -70,20 +70,20 @@ pub fn simple_vec_dp(N: usize, K: usize) -> i32 {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::egg_drop;
+    use crate::egg_drop_old;
 
     #[test]
     fn test_simple_vec_dp() {
-        assert_eq!(egg_drop(simple_vec_dp, 8, 8), 4); // useful for debugging
-        assert_eq!(egg_drop(simple_vec_dp, 2, 1), 1);
-        assert_eq!(egg_drop(simple_vec_dp, 1, 2), 2);
-        assert_eq!(egg_drop(simple_vec_dp, 2, 6), 3);
-        assert_eq!(egg_drop(simple_vec_dp, 3, 14), 4);
-        assert_eq!(egg_drop(simple_vec_dp, 4, 30), 5);
-        assert_eq!(egg_drop(simple_vec_dp, 5, 62), 6);
-        assert_eq!(egg_drop(simple_vec_dp, 6, 126), 7);
-        assert_eq!(egg_drop(simple_vec_dp, 50, 500), 9);
-        assert_eq!(egg_drop(simple_vec_dp, 10, 8), 4);
-        assert_eq!(egg_drop(simple_vec_dp, 50, 500), 9);
+        assert_eq!(egg_drop_old(simple_vec_dp, 8, 8), 4); // useful for debugging
+        assert_eq!(egg_drop_old(simple_vec_dp, 2, 1), 1);
+        assert_eq!(egg_drop_old(simple_vec_dp, 1, 2), 2);
+        assert_eq!(egg_drop_old(simple_vec_dp, 2, 6), 3);
+        assert_eq!(egg_drop_old(simple_vec_dp, 3, 14), 4);
+        assert_eq!(egg_drop_old(simple_vec_dp, 4, 30), 5);
+        assert_eq!(egg_drop_old(simple_vec_dp, 5, 62), 6);
+        assert_eq!(egg_drop_old(simple_vec_dp, 6, 126), 7);
+        assert_eq!(egg_drop_old(simple_vec_dp, 50, 500), 9);
+        assert_eq!(egg_drop_old(simple_vec_dp, 10, 8), 4);
+        assert_eq!(egg_drop_old(simple_vec_dp, 50, 500), 9);
     }
 }
