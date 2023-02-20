@@ -5,6 +5,7 @@ use criterion::{criterion_group, criterion_main, BenchmarkId, Criterion, Through
 fn bench(c: &mut Criterion) {
     let mut group = c.benchmark_group("Egg Drop");
     group.sample_size(10); // 10 is minimum required; default is 100
+    #[allow(clippy::single_element_loop)]
     for parameter in [20].iter() {
         group.throughput(Throughput::Elements(*parameter as u64));
         group.bench_with_input(

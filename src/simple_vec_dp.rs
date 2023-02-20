@@ -7,7 +7,7 @@ use std::cmp::{max, min};
 /// 2. dp[1][k] = k forall k s.t. k >= 0
 /// 3. 1, 2 means dp[n][k] = already calculated forall n s.t. n < 2 or forall k s.t. k < 1
 pub(crate) fn compute_block(
-    dp: &mut Vec<Vec<i32>>,
+    #[allow(clippy::ptr_arg)] dp: &mut Vec<Vec<i32>>,
     from_n: usize,
     to_n: usize,
     from_k: usize,
@@ -57,6 +57,7 @@ pub fn simple_vec_dp(N: usize, K: usize) -> i32 {
         println!();
     }
 
+    #[allow(clippy::needless_range_loop)]
     for n in 0..=N {
         for k in 0..=K {
             print!("{} ", dp[n][k]);
