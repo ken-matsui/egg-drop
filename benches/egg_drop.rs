@@ -5,7 +5,7 @@ use criterion::{criterion_group, criterion_main, BenchmarkId, Criterion, Through
 fn bench(c: &mut Criterion) {
     let mut group = c.benchmark_group("Egg Drop");
     group.sample_size(10); // 10 is minimum required; default is 100
-    for parameter in [50, 40, 30, 20, 10].iter() {
+    for parameter in [20].iter() {
         group.throughput(Throughput::Elements(*parameter as u64));
         group.bench_with_input(
             BenchmarkId::new("Serial Simple DP", parameter),

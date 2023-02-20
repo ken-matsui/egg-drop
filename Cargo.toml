@@ -19,3 +19,10 @@ rayon = ["dep:rayon"]
 [[bench]]
 name = "egg_drop"
 harness = false
+
+# The bench profile inherits the settings from the release profile.
+# https://doc.rust-lang.org/cargo/reference/profiles.html#bench
+[profile.release]
+lto = true
+panic = 'abort'
+codegen-units = 1
