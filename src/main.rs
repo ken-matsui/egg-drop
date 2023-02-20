@@ -31,6 +31,21 @@ fn step_by() {
 }
 
 #[allow(dead_code)]
+fn emulate_step_by() {
+    #[allow(non_snake_case)]
+    let N = 99_usize;
+    let n = 8_usize;
+
+    let mut from = 1;
+    while from <= N {
+        let to = if from + n < N { from + n } else { N };
+        println!("{from}..={to}");
+
+        from += n; // step_by
+    }
+}
+
+#[allow(dead_code)]
 fn diagonal_loop() {
     #[allow(non_snake_case)]
     let WIDTH: usize = 7;
@@ -71,5 +86,6 @@ fn diagonal_loop() {
 fn main() {
     // div_rounding();
     // step_by();
-    diagonal_loop();
+    emulate_step_by();
+    // diagonal_loop();
 }

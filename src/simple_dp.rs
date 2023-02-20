@@ -41,8 +41,10 @@ pub fn simple_dp(N: usize, K: usize, bsize: usize) -> i32 {
     let mut dp = DpTable::new(N, K);
     let dp_p = dp.as_mut_ptr();
 
-    for u in (2..=(N + K)).step_by(bsize) {
-        for k in (0..=u).step_by(bsize) {
+    let mut u = 2;
+    while u <= N + K {
+        let mut k = 0;
+        while k <= u {
             let n = u - k;
             if n <= N && k <= K {
                 let to_n = if n + bsize - 1 < N { n + bsize - 1 } else { N };
@@ -50,8 +52,12 @@ pub fn simple_dp(N: usize, K: usize, bsize: usize) -> i32 {
                 dprintln!("({n}, {k})..=({to_n}, {to_k})");
                 compute_block(dp_p.clone(), n, to_n, k, to_k);
             }
+
+            k += bsize; // step_by
         }
         dprintln!();
+
+        u += bsize; // step_by
     }
     dprintln!("{:?}", dp);
     dp.get(N, K)

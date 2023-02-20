@@ -20,8 +20,10 @@ pub fn par_simple_dp(N: usize, K: usize, bsize: usize) -> i32 {
     };
     let pool = ThreadPool::new(n_workers);
 
-    for u in (2..=(N + K)).step_by(bsize) {
-        for k in (0..=u).step_by(bsize) {
+    let mut u = 2;
+    while u <= N + K {
+        let mut k = 0;
+        while k <= u {
             let dp_p = dp_p.clone();
 
             pool.execute(move || {
@@ -33,9 +35,13 @@ pub fn par_simple_dp(N: usize, K: usize, bsize: usize) -> i32 {
                     compute_block(dp_p, n, to_n, k, to_k);
                 }
             });
+
+            k += bsize; // step_by
         }
         dprintln!();
         pool.join();
+
+        u += bsize; // step_by
     }
     dprintln!("{:?}", dp);
     dp.get(N, K)
