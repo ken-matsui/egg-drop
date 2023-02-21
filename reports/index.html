@@ -87,7 +87,7 @@
     <p>L2 cache:                        5 MiB (4 instances)</p>
     <p>L3 cache:                        12 MiB (1 instance)</p>
 
-    <h4>env-attu7:</h4>
+    <h4>attu7:</h4>
     <p>$ uname -m</p>
     <p>x86_64</p>
     <p>$ nproc --all</p>
@@ -227,6 +227,31 @@
             <p>n: 1000</p>
             <p>k: 1000</p>
             <p>block: 20</p>
+            <p>Sample size: 10 measurements</p>
+        </li>
+        <li>
+            <a href="12-row-vs-column/index.html">by row or by column</a>
+            <p>Compare by-row and by-column with traversing 100MB matrix</p>
+            <br>
+            <p>What changed:</p>
+            <p>In the compute_block function</p>
+            <ol>
+                <li>
+                    for n in from_n..=to_n {
+                    for k in from_k..=to_k {
+                </li>
+                <li>
+                    for k in from_k..=to_k {
+                    for n in from_n..=to_n {
+                </li>
+            </ol>
+            <p>for dp.get(n - 1, x - 1)</p>
+            <p>1 is better because it accesses near memory</p>
+            <br>
+            <p>Environment: attu7</p>
+            <p>n: 10000</p>
+            <p>k: 10000</p>
+            <p>block: 200</p>
             <p>Sample size: 10 measurements</p>
         </li>
     </ol>
