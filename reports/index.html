@@ -61,162 +61,173 @@
 <body>
 <div class="body">
     <h2>Criterion.rs Benchmark Index</h2>
-    Environment:
-    Apple M1 Pro (10 cores)
-    <ul>
+    <h3>Environments</h3>
+    <h4>env1:</h4>
+    <p>$ uname -m</p>
+    <p>arm64</p>
+    <p>$ sysctl -a | grep machdep.cpu.thread_count</p>
+    <p>machdep.cpu.thread_count: 10</p>
+    <p>$ sysctl -a | grep machdep.cpu.brand_string</p>
+    <p>machdep.cpu.brand_string: Apple M1 Pro</p>
+    <p>$ sysctl -a | egrep 'hw\.l.*cache'</p>
+    <p>hw.l1icachesize: 131072</p>
+    <p>hw.l1dcachesize: 65536</p>
+    <p>hw.l2cachesize: 4194304</p>
+
+    <h4>env2:</h4>
+    <p>$ uname -m</p>
+    <p>x86_64</p>
+    <p>$ nproc –all</p>
+    <p>8</p>
+    <p>$ lscpu | grep ‘Model name’</p>
+    <p>Model name:                      11th Gen Intel(R) Core(TM) i7-1185G7 @ 3.00GHz</p>
+    <p>$ lscpu | grep "cache"</p>
+    <p>L1d cache:                       192 KiB (4 instances)</p>
+    <p>L1i cache:                       128 KiB (4 instances)</p>
+    <p>L2 cache:                        5 MiB (4 instances)</p>
+    <p>L3 cache:                        12 MiB (1 instance)</p>
+
+    <h4>env-attu4:</h4>
+    <p>$ uname -m</p>
+    <p>x86_64</p>
+    <p>$ nproc –all</p>
+    <p>48</p>
+    <p>$ lscpu | grep ‘Model name’</p>
+    <p>Model name:                      Intel(R) Xeon(R) Gold 6132 CPU @ 2.60GHz</p>
+    <p>$ lscpu | grep "cache"</p>
+    <p>L1d cache:                       768 KiB (24 instances)</p>
+    <p>L1i cache:                       768 KiB (24 instances)</p>
+    <p>L2 cache:                        6 MiB (24 instances)</p>
+
+    <h3>Reports</h3>
+    <h4>Settings common across all benchmarks:</h4>
+    <p>Warm-up time: 3 s</p>
+    <p>Measurement time: 5 s</p>
+    <p>Bootstrap size: 100 000 resamples</p>
+    <p>Noise threshold: 0.01 (1%)</p>
+    <p>Confidence level: 0.95</p>
+    <p>Significance level: 0.05</p>
+
+    <h4>List of benchmarks:</h4>
+    <ol>
         <li>
-            <a href="1-vec-lfm/index.html">1-vec-lfm</a>
+            <a href="1-vec-lfm/index.html">vec-lfm</a>
             <p>Arc&lt;Vec&lt;Arc&lt;LockFreeMap&lt;usize, i32>>></p>
+            <br>
+            <p>Environment: env1</p>
             <p>n: 600, 700, 800, 900, 1000</p>
             <p>k: 1000</p>
             <p>block: 500</p>
-            <br>
             <p>Sample size: 100 measurements</p>
-            <p>Warm-up time: 3 s</p>
-            <p>Measurement time: 5 s</p>
-            <p>Bootstrap size: 100 000 resamples</p>
-            <p>Noise threshold: 0.01 (1%)</p>
-            <p>Confidence level: 0.95</p>
-            <p>Significance level: 0.05</p>
         </li>
         <li>
-            <a href="2-lfm/index.html">2-lfm</a>
+            <a href="2-lfm/index.html">lfm</a>
             <p>Arc&lt;LockFreeMap&lt;(usize, usize), i32></p>
+            <br>
+            <p>Environment: env1</p>
             <p>n: 600, 700, 800, 900, 1000</p>
             <p>k: 1000</p>
             <p>block: 500</p>
-            <br>
             <p>Sample size: 100 measurements</p>
-            <p>Warm-up time: 3 s</p>
-            <p>Measurement time: 5 s</p>
-            <p>Bootstrap size: 100 000 resamples</p>
-            <p>Noise threshold: 0.01 (1%)</p>
-            <p>Confidence level: 0.95</p>
-            <p>Significance level: 0.05</p>
         </li>
         <li>
-            <a href="3-fix-samples/index.html">3-fix-samples</a>
+            <a href="3-fix-samples/index.html">fix-samples</a>
             <p>Arc&lt;Vec&lt;Arc&lt;LockFreeMap&lt;usize, i32>>></p>
+            <br>
+            <p>Environment: env1</p>
             <p>n: 1000</p>
             <p>k: 1000</p>
             <p>block: 100</p>
-            <br>
             <p>Sample size: 10 measurements</p>
-            <p>Warm-up time: 3 s</p>
-            <p>Measurement time: 5 s</p>
-            <p>Bootstrap size: 100 000 resamples</p>
-            <p>Noise threshold: 0.01 (1%)</p>
-            <p>Confidence level: 0.95</p>
-            <p>Significance level: 0.05</p>
         </li>
         <li>
-            <a href="4-use-threadpool/index.html">4-use-threadpool</a>
+            <a href="4-use-threadpool/index.html">use-threadpool</a>
             <p>Arc&lt;Vec&lt;Arc&lt;LockFreeMap&lt;usize, i32>>></p>
+            <br>
+            <p>Environment: env1</p>
             <p>n: 1000</p>
             <p>k: 1000</p>
             <p>block: 100</p>
-            <br>
             <p>Sample size: 10 measurements</p>
-            <p>Warm-up time: 3 s</p>
-            <p>Measurement time: 5 s</p>
-            <p>Bootstrap size: 100 000 resamples</p>
-            <p>Noise threshold: 0.01 (1%)</p>
-            <p>Confidence level: 0.95</p>
-            <p>Significance level: 0.05</p>
         </li>
         <li>
-            <a href="5-use-rwlock/index.html">5-use-rwlock</a>
+            <a href="5-use-rwlock/index.html">use-rwlock</a>
             <p>Arc&lt;RwLock&lt;Vec&lt;Vec&lt;i32>>>></p>
+            <br>
+            <p>Environment: env1</p>
             <p>n: 1000</p>
             <p>k: 1000</p>
             <p>block: 100</p>
-            <br>
             <p>Sample size: 10 measurements</p>
-            <p>Warm-up time: 3 s</p>
-            <p>Measurement time: 5 s</p>
-            <p>Bootstrap size: 100 000 resamples</p>
-            <p>Noise threshold: 0.01 (1%)</p>
-            <p>Confidence level: 0.95</p>
-            <p>Significance level: 0.05</p>
         </li>
         <li>
-            <a href="6-use-unsafe/index.html">6-use-unsafe</a>
+            <a href="6-use-unsafe/index.html">use-unsafe</a>
             <p>Used a pointer</p>
+            <br>
+            <p>Environment: env1</p>
             <p>n: 1000</p>
             <p>k: 1000</p>
             <p>block: 100</p>
-            <br>
             <p>Sample size: 10 measurements</p>
-            <p>Warm-up time: 3 s</p>
-            <p>Measurement time: 5 s</p>
-            <p>Bootstrap size: 100 000 resamples</p>
-            <p>Noise threshold: 0.01 (1%)</p>
-            <p>Confidence level: 0.95</p>
-            <p>Significance level: 0.05</p>
         </li>
         <li>
-            <a href="7-optimum-bsize1/index.html">7-optimum-bsize1</a>
+            <a href="7-optimum-bsize1/index.html">optimum-bsize1</a>
             <p>Find the optimum block size - 1</p>
+            <br>
+            <p>Environment: env1</p>
             <p>n: 1000</p>
             <p>k: 1000</p>
             <p>block: [50, 100, ..., 300]</p>
-            <br>
             <p>Sample size: 10 measurements</p>
-            <p>Warm-up time: 3 s</p>
-            <p>Measurement time: 5 s</p>
-            <p>Bootstrap size: 100 000 resamples</p>
-            <p>Noise threshold: 0.01 (1%)</p>
-            <p>Confidence level: 0.95</p>
-            <p>Significance level: 0.05</p>
         </li>
         <li>
-            <a href="8-optimum-bsize2/index.html">8-optimum-bsize2</a>
+            <a href="8-optimum-bsize2/index.html">optimum-bsize2</a>
             <p>Find the optimum block size - 2</p>
+            <br>
+            <p>Environment: env1</p>
             <p>n: 1000</p>
             <p>k: 1000</p>
             <p>block: [10, 20, ..., 50]</p>
-            <br>
             <p>Sample size: 10 measurements</p>
-            <p>Warm-up time: 3 s</p>
-            <p>Measurement time: 5 s</p>
-            <p>Bootstrap size: 100 000 resamples</p>
-            <p>Noise threshold: 0.01 (1%)</p>
-            <p>Confidence level: 0.95</p>
-            <p>Significance level: 0.05</p>
         </li>
         <li>
-            <a href="9-compile-options/index.html">9-compile-options</a>
+            <a href="9-compile-options/index.html">compile-options</a>
             <p>Try better compile options</p>
             <p>ref: https://nnethercote.github.io/perf-book/title-page.html</p>
+            <br>
+            <p>Environment: env1</p>
             <p>n: 1000</p>
             <p>k: 1000</p>
             <p>block: 20</p>
-            <br>
             <p>Sample size: 10 measurements</p>
-            <p>Warm-up time: 3 s</p>
-            <p>Measurement time: 5 s</p>
-            <p>Bootstrap size: 100 000 resamples</p>
-            <p>Noise threshold: 0.01 (1%)</p>
-            <p>Confidence level: 0.95</p>
-            <p>Significance level: 0.05</p>
         </li>
         <li>
-            <a href="10-avoid-step_by/index.html">10-avoid-step_by</a>
+            <a href="10-avoid-step_by/index.html">avoid-step_by</a>
             <p>Avoid using step_by</p>
-            <p>ref: https://github.com/rust-lang/rust/issues/57517</p>
+            <p>ref:
+                <ul>
+                    <li>https://github.com/rust-lang/rust/issues/57517</li>
+                    <li>https://github.com/rust-lang/rust/issues/43064</li>
+                </ul>
+            </p>
+            <br>
+            <p>Environment: env1</p>
             <p>n: 1000</p>
             <p>k: 1000</p>
             <p>block: 20</p>
-            <br>
             <p>Sample size: 10 measurements</p>
-            <p>Warm-up time: 3 s</p>
-            <p>Measurement time: 5 s</p>
-            <p>Bootstrap size: 100 000 resamples</p>
-            <p>Noise threshold: 0.01 (1%)</p>
-            <p>Confidence level: 0.95</p>
-            <p>Significance level: 0.05</p>
         </li>
-    </ul>
+        <li>
+            <a href="11-env2/index.html">env2</a>
+            <p>the same code but test on env2</p>
+            <br>
+            <p>Environment: env2</p>
+            <p>n: 1000</p>
+            <p>k: 1000</p>
+            <p>block: 20</p>
+            <p>Sample size: 10 measurements</p>
+        </li>
+    </ol>
 </div>
 </body>
 </html>
