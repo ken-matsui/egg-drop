@@ -1,4 +1,5 @@
 #![feature(int_roundings)]
+#![feature(core_intrinsics)]
 
 mod dptable;
 mod fast_dp;

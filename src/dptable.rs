@@ -15,6 +15,11 @@ impl<V: Copy> DpTablePtr<V> {
     pub(crate) unsafe fn insert(&self, n: usize, k: usize, val: V) {
         (*self.0.add(n))[k] = val;
     }
+    #[allow(dead_code)]
+    #[inline]
+    pub(crate) fn as_const_ptr(&self) -> *const Vec<V> {
+        self.0
+    }
 }
 
 #[allow(non_snake_case)]
