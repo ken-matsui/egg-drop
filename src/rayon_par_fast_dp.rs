@@ -1,5 +1,3 @@
-#![cfg(feature = "rayon")]
-
 use std::sync::Arc;
 
 use lockfree::map::Map as LockFreeMap;
