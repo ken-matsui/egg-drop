@@ -1,6 +1,7 @@
-use threadpool::ThreadPool;
+use std::cmp::min;
 
 use debug_print::debug_println as dprintln;
+use threadpool::ThreadPool;
 
 use crate::dptable::DpTable;
 use crate::simple_dp::compute_block;
@@ -13,10 +14,8 @@ pub fn par_simple_dp(N: usize, K: usize, bsize: usize) -> i32 {
 
     let n_workers = if bsize > N || bsize > K {
         1
-    } else if N / bsize >= K / bsize {
-        N / bsize // 1000/100 = max 10 diagonal blocks in the middle
     } else {
-        K / bsize
+        min(N, K) / bsize
     };
     let pool = ThreadPool::new(n_workers);
 
